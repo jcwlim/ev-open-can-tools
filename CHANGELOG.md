@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.0-beta.1] - 2026-04-30
+
+### Added
+
+- Added MCP2515 recovery regression coverage for the RP2040 CAN driver.
+- Added `platformio_profile.example.h` as the committed build-config template.
+
+### Changed
+
+- `platformio_profile.h` is now treated as a local-only build config and ignored by git. Copy `platformio_profile.example.h` to `platformio_profile.h` before building, then keep board choices, credentials, and keys in the local file.
+- Build documentation and helper-script errors now describe `platformio_profile.h` as the local build config and point fresh checkouts to the example file.
+
+### Fixed
+
+- RP2040 MCP2515 builds now recover the CAN controller after repeated TX failures or MCP2515 bus-off (`EFLG_TXBO`) instead of staying silent until power-cycled.
+
 ## [2.5.2] - 2026-04-29
 
 Stable release bundling the AP Injection Gate Smart Summon fixes from `2.5.2-beta.1` through `2.5.2-beta.6`.
