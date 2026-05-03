@@ -6,6 +6,8 @@
 #if defined(NATIVE_BUILD)
 #include <string>
 using String = std::string;
+#elif defined(ESP_PLATFORM)
+#include "platform/espidf_runtime.h"
 #else
 #include <SPIFFS.h>
 #endif

@@ -77,8 +77,6 @@ This is the easiest and most user-friendly setup path in the project.
 
 | PlatformIO env | Board / target | CAN interface | Dashboard |
 | --- | --- | --- | --- |
-| `feather_rp2040_can` | Adafruit Feather RP2040 CAN | MCP2515 | No |
-| `feather_m4_can` | Adafruit Feather M4 CAN Express | Native CAN | No |
 | `esp32_twai` | Generic ESP32 dev board | TWAI | Yes |
 | `lilygo_tcan485_hw3` | LILYGO TCAN485 | TWAI | Yes |
 | `m5stack-atomic-can-base` | M5Stack Atom CAN Base | TWAI | Yes |
@@ -87,9 +85,16 @@ This is the easiest and most user-friendly setup path in the project.
 | `esp32_ext_mcp2515` | ESP32-S3 + external MCP2515 | SPI MCP2515 | Yes |
 | `waveshare_ESP32_S3_RS485_CAN` | Waveshare ESP32-S3 RS485/CAN | TWAI | Yes |
 
-ESP32 dashboard builds are the full-featured path. They include the web UI, plugin engine, WiFi, OTA, and persistent runtime settings.
+ESP32 dashboard builds are the full-featured path. They use ESP-IDF and include the web UI, plugin engine, WiFi, OTA, and persistent runtime settings.
 
-Non-dashboard builds keep the core CAN modification logic but do not provide the web management interface.
+Arduino-only boards that cannot use ESP-IDF live in [`legacy-arduino/`](legacy-arduino/):
+
+| PlatformIO env | Board / target | CAN interface | Dashboard |
+| --- | --- | --- | --- |
+| `feather_rp2040_can` | Adafruit Feather RP2040 CAN | MCP2515 | No |
+| `feather_m4_can` | Adafruit Feather M4 CAN Express | Native CAN | No |
+
+Non-dashboard legacy builds keep the core CAN modification logic but do not provide the web management interface.
 
 ## Quick Start For More Technical Users
 
@@ -107,6 +112,14 @@ Example:
 ```bash
 pio run -e esp32_ext_mcp2515
 pio run -e esp32_ext_mcp2515 -t upload
+```
+
+Legacy Arduino-only boards are built from `legacy-arduino/`:
+
+```bash
+cd legacy-arduino
+pio run -e feather_rp2040_can
+pio run -e feather_m4_can
 ```
 
 For a fuller setup flow and board-specific notes, see [Build & Flash](https://ev-open-can-tools.github.io/ev-open-can-tools/docs/building.html).

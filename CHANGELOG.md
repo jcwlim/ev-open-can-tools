@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0-beta.1] - 2026-05-03
+
+### Added
+
+- ESP-IDF 5.5 native build path replacing the Arduino framework on supported targets (M5Stack AtomS3 Lite verified). Adds `src/espidf_runtime.cpp` plus `include/platform/espidf_runtime.h` providing Arduino-compatible shims (`String`, `WiFi`, `WebServer`, `Preferences`, `Update`, `HTTPClient`, `SPIFFS`, etc.) on top of ESP-IDF APIs.
+- ESP-IDF `led_strip` (RMT) implementation of the on-board RGB status LED so the AtomS3 Lite indicator works under IDF (green = injecting, red = idle).
+- "Status LED Brightness" subsection in the Configuration card with a slider and number input (0–255), persisted in NVS (`led_b`) and applied live via `/led_brightness`.
+- Multi-SSID WiFi support — up to 4 saved networks. The device tries each in turn until one connects (e.g. home + phone hotspot). New endpoints `/wifi_networks`, `/wifi_delete`; `/wifi_config` accepts an `idx` argument to update a specific slot. Legacy single-SSID NVS keys auto-migrate to slot 0 on first boot.
+- `scripts/minify_dashboard.py` — minifies the dashboard HTML/CSS/JS (csscompressor + terser + htmlmin) and emits a gzipped `DASH_HTML_GZ[]` payload served with `Content-Encoding: gzip`. Dashboard source-of-truth moved to `include/web/mcp2515_dashboard_ui.src.h`.
+
+### Changed
+
+- Flash usage on `m5stack-atoms3-mini-can-base` reduced from 79.0 % (1,243,217 B) to 64.8 % (1,019,835 B) — about 223 KB saved with no feature loss. Drivers:
+  - `CONFIG_COMPILER_OPTIMIZATION_SIZE=y` (was `OPTIMIZATION_DEBUG`),
+  - `CONFIG_NEWLIB_NANO_FORMAT=y` plus integer formatting for the FPS field,
+  - `CONFIG_ESP_ERR_TO_NAME_LOOKUP=n`,
+  - `CONFIG_BOOTLOADER_LOG_LEVEL_ERROR=y`,
+  - gzipped dashboard HTML (≈120 KB raw rodata → ≈30 KB compressed).
+- `WebServer::send_P` no longer copies the body into a `String` (which OOM'd on the 130 KB dashboard HTML and aborted the httpd task). It now streams large responses in 4 KB chunks via `httpd_resp_send_chunk` directly from the source pointer (`sendRaw`).
+- `WebServer::begin()` bumps the IDF httpd task stack to 16 KB and moves the per-request URL-query buffer to the heap, fixing a stack overflow on the first dashboard hit.
+
+### Fixed
+
+- `httpd` task stack overflow on the first client connection on ESP-IDF builds.
+- `bad_alloc` / `terminate` reboot when serving the root dashboard page over the soft-AP on ESP-IDF builds.
+
 ## [2.6.0-beta.1] - 2026-04-30
 
 ### Added

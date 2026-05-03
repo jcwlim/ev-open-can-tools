@@ -7,10 +7,17 @@
 #include "handlers.h"
 
 #ifndef NATIVE_BUILD
+#ifdef ESP_PLATFORM
+#include "platform/espidf_runtime.h"
+#else
 #include <Arduino.h>
 #endif
-#if defined(DASH_RGB_STATUS_LED) && !defined(NATIVE_BUILD)
+#endif
+#if defined(DASH_RGB_STATUS_LED) && !defined(NATIVE_BUILD) && !defined(ESP_PLATFORM)
 #include <esp32-hal-rgb-led.h>
+#endif
+#if defined(DASH_RGB_STATUS_LED) && defined(ESP_PLATFORM)
+#include <led_strip.h>
 #endif
 
 #ifndef PIN_LED
@@ -62,7 +69,23 @@ static void appPollInjectionToggleButton();
 #if defined(ESP32_DASHBOARD) && !defined(NATIVE_BUILD) && defined(DASH_RGB_STATUS_LED)
 static void appWriteStatusLed(uint8_t red, uint8_t green, uint8_t blue)
 {
-#if defined(ESP_ARDUINO_VERSION_MAJOR) && (ESP_ARDUINO_VERSION_MAJOR >= 3)
+#ifdef ESP_PLATFORM
+    static led_strip_handle_t strip = nullptr;
+    if (!strip)
+    {
+        led_strip_config_t scfg = {};
+        scfg.strip_gpio_num = PIN_LED;
+        scfg.max_leds = 1;
+        scfg.led_model = LED_MODEL_WS2812;
+        scfg.color_component_format = LED_STRIP_COLOR_COMPONENT_FMT_GRB;
+        led_strip_rmt_config_t rcfg = {};
+        rcfg.resolution_hz = 10 * 1000 * 1000;
+        if (led_strip_new_rmt_device(&scfg, &rcfg, &strip) != ESP_OK)
+            return;
+    }
+    led_strip_set_pixel(strip, 0, red, green, blue);
+    led_strip_refresh(strip);
+#elif defined(ESP_ARDUINO_VERSION_MAJOR) && (ESP_ARDUINO_VERSION_MAJOR >= 3)
     rgbLedWrite(PIN_LED, red, green, blue);
 #else
     neopixelWrite(PIN_LED, red, green, blue);
@@ -73,18 +96,16 @@ static void appRefreshStatusLed(bool force)
 {
     static bool known = false;
     static bool lastInjecting = false;
-#ifdef RGB_BRIGHTNESS
-    constexpr uint8_t kStatusLedLevel = RGB_BRIGHTNESS;
-#else
-    constexpr uint8_t kStatusLedLevel = 32;
-#endif
+    static uint8_t lastLevel = 0;
 
     bool injecting = canActive;
-    if (!force && known && lastInjecting == injecting)
+    uint8_t level = dashLedBrightness;
+    if (!force && known && lastInjecting == injecting && lastLevel == level)
         return;
 
-    appWriteStatusLed(injecting ? 0 : kStatusLedLevel, injecting ? kStatusLedLevel : 0, 0);
+    appWriteStatusLed(injecting ? 0 : level, injecting ? level : 0, 0);
     lastInjecting = injecting;
+    lastLevel = level;
     known = true;
 }
 #endif

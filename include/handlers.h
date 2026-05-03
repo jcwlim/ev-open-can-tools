@@ -9,7 +9,11 @@
 #include "log_buffer.h"
 
 #ifndef NATIVE_BUILD
+#ifdef ESP_PLATFORM
+#include "platform/espidf_runtime.h"
+#else
 #include <Arduino.h>
+#endif
 #endif
 
 inline LogRingBuffer logRing;
