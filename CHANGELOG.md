@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0-beta.4] - 2026-05-04
+
+### Added
+
+- Manual firmware upload now has a dashboard button to clear saved OTA username/password credentials from browser local storage.
+
 ## [3.0.0-beta.3] - 2026-05-04
 
 ### Added

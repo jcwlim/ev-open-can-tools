@@ -675,6 +675,7 @@ hr{border:none;border-top:1px solid var(--bd);margin:16px}
         <div class="ota-status" id="ota-status">Uploading...</div>
       </div>
       <button class="ota-btn" id="ota-upload-btn" onclick="uploadFirmware()">Flash Firmware</button>
+      <button class="sniff-btn" id="ota-reset-btn" onclick="resetOtaCredentials()" style="width:100%;margin-top:6px">Reset OTA Credentials</button>
       <div style="margin-top:10px;font-size:11px;color:var(--tx3);line-height:1.7">
         Build your .bin in PlatformIO: <span style="color:var(--acc);font-family:monospace">Ctrl+Alt+B</span><br>
         File is at: <span style="color:var(--acc);font-family:monospace">.pio/build/esp32_ext_mcp2515/firmware.bin</span>
@@ -1451,6 +1452,18 @@ function handleDrop(e){
   $('ota-drop').classList.remove('drag');
   const file=e.dataTransfer.files[0];
   if(file&&file.name.endsWith('.bin'))fileSelected(file);
+}
+
+function resetOtaCredentials(){
+  localStorage.removeItem('otaU');
+  localStorage.removeItem('otaP');
+  otaUser='';
+  otaPass='';
+  const btn=$('ota-reset-btn');
+  if(btn){
+    btn.textContent='OTA Credentials Reset';
+    setTimeout(()=>{btn.textContent='Reset OTA Credentials';},1500);
+  }
 }
 
 async function uploadFirmware(){

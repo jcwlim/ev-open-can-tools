@@ -163,6 +163,12 @@ class WifiSettingsRegressionTests(unittest.TestCase):
 
         self.assertIn("INJECTION_AFTER_AP", self.sync)
 
+    def test_manual_ota_credentials_can_be_reset_from_dashboard(self) -> None:
+        self.assertHasUiId("ota-reset-btn")
+        self.assertIn("resetOtaCredentials()", self.ui)
+        self.assertRegex(self.ui, r"localStorage\.removeItem\([\"']otaU[\"']\)")
+        self.assertRegex(self.ui, r"localStorage\.removeItem\([\"']otaP[\"']\)")
+
 
 if __name__ == "__main__":
     unittest.main()
