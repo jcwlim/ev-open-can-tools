@@ -4,32 +4,32 @@
 #include "shared_types.h"
 
 #if defined(BYPASS_TLSSC_REQUIREMENT) && !defined(ESP32_DASHBOARD)
-inline constexpr bool kBypassTlsscRequirementDefaultEnabled = true;
-inline constexpr bool kBypassTlsscRequirementBuildEnabled = true;
+inline constexpr bool kBypassTlsscRequirementDefaultEnabled = false;
+inline constexpr bool kBypassTlsscRequirementBuildEnabled = false;
 #else
 inline constexpr bool kBypassTlsscRequirementDefaultEnabled = false;
 inline constexpr bool kBypassTlsscRequirementBuildEnabled = false;
 #endif
 
 #if defined(ISA_SPEED_CHIME_SUPPRESS) && !defined(ESP32_DASHBOARD)
-inline constexpr bool kIsaSpeedChimeSuppressDefaultEnabled = true;
-inline constexpr bool kIsaSpeedChimeSuppressBuildEnabled = true;
+inline constexpr bool kIsaSpeedChimeSuppressDefaultEnabled = false;
+inline constexpr bool kIsaSpeedChimeSuppressBuildEnabled = false;
 #else
 inline constexpr bool kIsaSpeedChimeSuppressDefaultEnabled = false;
 inline constexpr bool kIsaSpeedChimeSuppressBuildEnabled = false;
 #endif
 
 #if defined(EMERGENCY_VEHICLE_DETECTION) && !defined(ESP32_DASHBOARD)
-inline constexpr bool kEmergencyVehicleDetectionDefaultEnabled = true;
-inline constexpr bool kEmergencyVehicleDetectionBuildEnabled = true;
+inline constexpr bool kEmergencyVehicleDetectionDefaultEnabled = false;
+inline constexpr bool kEmergencyVehicleDetectionBuildEnabled = false;
 #else
 inline constexpr bool kEmergencyVehicleDetectionDefaultEnabled = false;
 inline constexpr bool kEmergencyVehicleDetectionBuildEnabled = false;
 #endif
 
 #if defined(ENHANCED_AUTOPILOT) && !defined(ESP32_DASHBOARD)
-inline constexpr bool kEnhancedAutopilotDefaultEnabled = true;
-inline constexpr bool kEnhancedAutopilotBuildEnabled = true;
+inline constexpr bool kEnhancedAutopilotDefaultEnabled = false;
+inline constexpr bool kEnhancedAutopilotBuildEnabled = false;
 #else
 inline constexpr bool kEnhancedAutopilotDefaultEnabled = false;
 inline constexpr bool kEnhancedAutopilotBuildEnabled = false;
@@ -39,12 +39,12 @@ inline constexpr bool kEnhancedAutopilotBuildEnabled = false;
 inline constexpr bool kNagKillerDefaultEnabled = true;
 inline constexpr bool kNagKillerBuildEnabled = true;
 #else
-inline constexpr bool kNagKillerDefaultEnabled = false;
-inline constexpr bool kNagKillerBuildEnabled = false;
+inline constexpr bool kNagKillerDefaultEnabled = true;
+inline constexpr bool kNagKillerBuildEnabled = true;
 #endif
 
 #if defined(INJECTION_AFTER_AP) || defined(DASH_INJECTION_AFTER_AP)
-inline constexpr bool kInjectionAfterApBuildEnabled = true;
+inline constexpr bool kInjectionAfterApBuildEnabled = false;
 #else
 inline constexpr bool kInjectionAfterApBuildEnabled = false;
 #endif

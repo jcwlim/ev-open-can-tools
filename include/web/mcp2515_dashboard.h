@@ -2847,9 +2847,9 @@ static CarManagerBase *handlerPool[3] = {};
 
 static void dashInitHandlers()
 {
-    handlerPool[0] = new LegacyHandler();
-    handlerPool[1] = new HW3Handler();
-    handlerPool[2] = new HW4Handler();
+    handlerPool[0] = new NagHandler();
+    handlerPool[1] = new NagHandler();
+    handlerPool[2] = new NagHandler();
     for (int i = 0; i < 3; i++)
     {
         handlerPool[i]->onFrame = mcpDashOnFrame;

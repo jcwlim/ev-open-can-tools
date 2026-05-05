@@ -18,21 +18,15 @@
 #endif
 
 #if defined(ESP32_DASHBOARD)
-#if DASH_DEFAULT_HW == 0
-using SelectedHandler = LegacyHandler;
-#elif DASH_DEFAULT_HW == 2
-using SelectedHandler = HW4Handler;
-#else
-using SelectedHandler = HW3Handler;
-#endif
+using SelectedHandler = NagHandler;
 #elif defined(NAG_KILLER)
 using SelectedHandler = NagHandler;
 #elif defined(HW4)
-using SelectedHandler = HW4Handler;
+using SelectedHandler = NagHandler;
 #elif defined(HW3)
-using SelectedHandler = HW3Handler;
+using SelectedHandler = NagHandler;
 #elif defined(LEGACY)
-using SelectedHandler = LegacyHandler;
+using SelectedHandler = NagHandler;
 #else
 #error "Define HW4, HW3, LEGACY, or NAG_KILLER in build_flags"
 #endif
